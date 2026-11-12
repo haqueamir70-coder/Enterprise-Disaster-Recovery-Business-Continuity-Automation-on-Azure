@@ -16,9 +16,11 @@ A portfolio-grade reference implementation for designing, validating, and operat
 - Python readiness validator for recovery order, dependencies, missing services, cycles and RTO/RPO input policy.
 - Operational runbooks, tabletop exercise, evidence checklist and **65 interview questions with answers**.
 
-## Architecture
+## Premium architecture diagram
 
-See [architecture/README.md](architecture/README.md) and [architecture/bcdr-reference-architecture.mmd](architecture/bcdr-reference-architecture.mmd).
+![Azure Enterprise BCDR Premium Architecture](architecture/azure-bcdr-premium.svg)
+
+Open the [full-size colour architecture diagram](architecture/azure-bcdr-premium.svg). Editable Mermaid source: [architecture/bcdr-reference-architecture.mmd](architecture/bcdr-reference-architecture.mmd). Architecture explanation: [architecture/README.md](architecture/README.md).
 
 The logical flow is primary region → supported replication/backup workflows → recovery region → dependency and application validation → business acceptance. Recovery plans coordinate steps; they do not automatically restore DNS, external integrations, identity or data consistency.
 
