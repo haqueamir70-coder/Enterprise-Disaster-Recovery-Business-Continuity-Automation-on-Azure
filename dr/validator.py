@@ -65,18 +65,23 @@ def validate_plan(plan: RecoveryPlan) -> dict[str, object]:
 
     for workload in plan.workloads:
         for dependency in workload.dependencies:
-            if dependency in by_name and by_name[dependency].recovery_order >= workload.recovery_order:
+            if (
+                dependency in by_name
+                and by_name[dependency].recovery_order >= workload.recovery_order
+            ):
                 errors.append(
                     f"{workload.name}: dependency '{dependency}' must have a lower recovery_order."
                 )
 
     if plan.exercise_type == "test-failover":
         warnings.append(
-            "Confirm the target is an isolated test network and cleanup is approved before execution."
+            "Confirm the target is an isolated test network and cleanup is approved "
+            "before execution."
         )
     if plan.exercise_type in {"planned-failover", "unplanned-failover", "failback"}:
         warnings.append(
-            "This validator does not execute failover. Require change approval, operator authorization and service-specific checks."
+            "This validator does not execute failover. Require change approval, "
+            "operator authorization and service-specific checks."
         )
     for workload in plan.workloads:
         if workload.rpo_minutes == 0:
