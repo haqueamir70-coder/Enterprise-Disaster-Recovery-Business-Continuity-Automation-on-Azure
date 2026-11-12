@@ -1,0 +1,28 @@
+flowchart LR
+  subgraph P["Primary Azure region"]
+    PAPP["Application tier"]
+    PDATA[("Primary data tier")]
+    PIDENT["Identity and platform services"]
+    PAPP --> PDATA
+    PAPP --> PIDENT
+  end
+  subgraph R["Recovery Azure region"]
+    RAPP["Recovered application tier"]
+    RDATA[("Recovery data / restore point")]
+    RNET["Isolated test network"]
+    RAPP --> RDATA
+    RAPP --> RNET
+  end
+  subgraph OPS["BCDR operations"]
+    ASR["Azure Site Recovery<br/>supported workload replication"]
+    BAK["Azure Backup<br/>vault and restore controls"]
+    PLAN["Recovery plan<br/>ordered steps / approvals"]
+    OBS["Azure Monitor / Log Analytics<br/>evidence and recovery metrics"]
+  end
+  PAPP -. "replication where supported" .-> ASR
+  PDATA -. "backup / restore" .-> BAK
+  ASR --> PLAN
+  BAK --> PLAN
+  PLAN --> RAPP
+  PAPP --> OBS
+  RAPP --> OBS
