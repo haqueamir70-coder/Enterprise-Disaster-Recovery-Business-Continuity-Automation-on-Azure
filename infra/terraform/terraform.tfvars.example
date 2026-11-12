@@ -1,0 +1,6 @@
+location            = "eastus"
+resource_group_name = "rg-bcdr-lab"
+environment         = "lab"
+
+# False intentionally prevents accidental Azure resource creation.
+deploy_foundation = false
