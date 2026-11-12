@@ -1,24 +1,43 @@
-# Reference architecture
+# Enterprise Azure BCDR reference architecture
 
-Logical architecture only; it is not a deployment manifest. Verify regional pairing, service support, quotas, networking and workload limits against current Microsoft documentation.
+![Full-colour Azure BCDR architecture](azure-bcdr-premium.svg)
 
-## Components
+**Open the [full-size premium diagram](azure-bcdr-premium.svg).** It is a vector SVG, so it remains sharp when zoomed. The Mermaid source is also available in [bcdr-reference-architecture.mmd](bcdr-reference-architecture.mmd).
 
-- Primary region: production workload and source data.
-- Recovery region: pre-provisioned or deploy-on-recovery dependencies, protected workload components and isolated test network.
-- Azure Site Recovery: supported compute replication and recovery-plan orchestration.
-- Azure Backup: workload-specific backup protection and restore; vault type and features depend on datasource.
-- Identity: Microsoft Entra ID, privileged access, managed identities and emergency access.
-- Network: hub/spoke or Virtual WAN, private DNS, private endpoints, firewalls, routes and controlled ingress.
-- Operations: incident commander, recovery lead, app/data owners, communications lead and evidence recorder.
+## How to read the architecture
 
-## Design decisions
+### 1. Primary region — where the business normally runs
+The application tier calls the data/messaging tier and shared platform services. Identity, DNS, Key Vault, certificates and network connectivity are dependencies, not optional decorations. If any of these fail, an otherwise healthy VM may still be unusable.
 
-1. Select regions based on service availability, data residency, capacity, latency, connectivity and business risk.
-2. RTO is end-to-end service restoration, not VM boot time.
-3. RPO is based on the latest validated consistent recovery point.
-4. Protect backup control plane separately from compute replication.
-5. Test failover uses an isolated network and documented cleanup.
-6. Failback is a separately approved workflow involving reprotection, synchronization, reconciliation and validation.
+### 2. Protection and orchestration — how recovery is prepared
+- **Azure Site Recovery:** replication and recovery-plan orchestration for supported workload/source/target combinations.
+- **Azure Backup:** workload-specific backup policies, vaults, retention and recovery points.
+- **Recovery orchestration:** orders recovery steps, inserts manual approval checkpoints and captures evidence.
+- **IaC and policy:** reproducible supporting infrastructure, code review and guardrails.
 
-See [bcdr-reference-architecture.mmd](bcdr-reference-architecture.mmd).
+ASR and Azure Backup solve different protection problems. A backup is not the same thing as a replicated workload, and neither proves the full application can recover.
+
+### 3. Recovery region — where service is brought back
+The target needs compute, data, identity, routes, DNS, private endpoints, secrets and sufficient quota/capacity. Test failover should use an isolated test network. Before customer traffic is enabled, validate data consistency and an end-to-end synthetic transaction.
+
+### 4. Cross-cutting controls
+- **Identity/security:** RBAC, PIM/JIT, OIDC, Key Vault and emergency access.
+- **Network/DNS:** private connectivity, routing, egress, name resolution and controlled ingress.
+- **Observability:** Azure Monitor, Log Analytics, alerts and timestamped evidence.
+- **Governance:** change approvals, policy, cost controls and separation of duties.
+- **Business validation:** measured RTO/RPO, successful transactions and service-owner sign-off.
+
+## Example recovery sequence
+
+1. Confirm incident authority and business impact.
+2. Validate recovery point and accepted data-loss exposure.
+3. Recover shared identity/network/DNS prerequisites.
+4. Recover data and messaging services.
+5. Recover APIs and application workloads.
+6. Validate security, dependencies, transactions and data consistency.
+7. Obtain business acceptance and control traffic cutover.
+8. Reprotect/failback only through a separately approved procedure.
+
+## Design caveats
+
+This is a logical reference, not a promise that all depicted services are available for every workload or region. Validate the exact Azure service support matrix, region/SKU availability, quotas, network topology, licensing and pricing. The sample architecture does not execute failover or deploy ASR/Backup resources.
