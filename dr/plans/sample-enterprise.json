@@ -1,0 +1,44 @@
+{
+  "plan_name": "synthetic-enterprise-commerce-dr",
+  "primary_region": "eastus",
+  "recovery_region": "westus3",
+  "exercise_type": "test-failover",
+  "workloads": [
+    {
+      "name": "identity-network",
+      "tier": "tier-0",
+      "rto_minutes": 30,
+      "rpo_minutes": 15,
+      "dependencies": [],
+      "recovery_order": 1,
+      "recovery_method": "pre-staged identity/network services and documented validation"
+    },
+    {
+      "name": "data-platform",
+      "tier": "tier-0",
+      "rto_minutes": 60,
+      "rpo_minutes": 15,
+      "dependencies": ["identity-network"],
+      "recovery_order": 2,
+      "recovery_method": "restore or recover supported database from an approved recovery point"
+    },
+    {
+      "name": "customer-api",
+      "tier": "tier-1",
+      "rto_minutes": 90,
+      "rpo_minutes": 30,
+      "dependencies": ["identity-network", "data-platform"],
+      "recovery_order": 3,
+      "recovery_method": "recover supported application workload and validate synthetic health checks"
+    },
+    {
+      "name": "web-frontend",
+      "tier": "tier-2",
+      "rto_minutes": 180,
+      "rpo_minutes": 60,
+      "dependencies": ["customer-api"],
+      "recovery_order": 4,
+      "recovery_method": "redeploy immutable frontend package and switch approved traffic routing"
+    }
+  ]
+}
