@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Azure Enterprise Disaster Recovery and Business Continuity Reference Architecture</title>
+<desc id="desc">Premium architecture diagram showing primary region, replication and backup control planes, recovery region, security and operations.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#08152f"/><stop offset="1" stop-color="#142c50"/></linearGradient>
+  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1687f8"/><stop offset="1" stop-color="#0754ba"/></linearGradient>
+  <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#12c8d8"/><stop offset="1" stop-color="#087f9f"/></linearGradient>
+  <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a66cff"/><stop offset="1" stop-color="#6635c7"/></linearGradient>
+  <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#22c98b"/><stop offset="1" stop-color="#0b895f"/></linearGradient>
+  <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffb454"/><stop offset="1" stop-color="#d86a25"/></linearGradient>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#020817" flood-opacity=".35"/></filter>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0 L12 6 L0 12Z" fill="#80bfff"/></marker>
+  <style>
+    .h{font:700 34px 'Segoe UI',Arial,sans-serif;fill:#fff}.sub{font:400 17px 'Segoe UI',Arial,sans-serif;fill:#bdd0e8}
+    .zone{font:700 22px 'Segoe UI',Arial,sans-serif;fill:#fff}.k{font:700 17px 'Segoe UI',Arial,sans-serif;fill:#fff}
+    .t{font:400 15px 'Segoe UI',Arial,sans-serif;fill:#e4efff}.s{font:400 13px 'Segoe UI',Arial,sans-serif;fill:#c2d4eb}
+    .tag{font:700 12px 'Segoe UI',Arial,sans-serif;fill:#d8eaff;letter-spacing:1px}
+    .line{stroke:#80bfff;stroke-width:3;fill:none;marker-end:url(#arrow)}
+    .dash{stroke:#78a9e8;stroke-width:2.5;stroke-dasharray:9 8;fill:none;marker-end:url(#arrow)}
+  </style>
+</defs>
+<rect width="1600" height="1000" rx="28" fill="url(#bg)"/>
+<circle cx="1440" cy="90" r="180" fill="#1e65b7" opacity=".12"/><circle cx="90" cy="900" r="220" fill="#17b6cb" opacity=".08"/>
+<text x="70" y="68" class="tag">ENTERPRISE CLOUD RESILIENCE • REFERENCE DESIGN</text>
+<text x="70" y="116" class="h">Azure Disaster Recovery &amp; Business Continuity</text>
+<text x="70" y="148" class="sub">Design for recoverability: protect data, orchestrate dependencies, validate the service, prove the business outcome.</text>
+
+<!-- Primary zone -->
+<rect x="55" y="195" width="440" height="545" rx="22" fill="#10284a" stroke="#3286e8" stroke-width="2" filter="url(#shadow)"/>
+<rect x="55" y="195" width="440" height="62" rx="22" fill="url(#blue)"/>
+<text x="82" y="235" class="zone">01  PRIMARY REGION</text>
+<text x="82" y="285" class="s">Production workload • example: East US</text>
+<rect x="88" y="315" width="374" height="88" rx="14" fill="#183b65" stroke="#3f8be0"/>
+<text x="112" y="348" class="k">Application tier</text><text x="112" y="375" class="t">Web / API / microservices / AKS or VMs</text>
+<rect x="88" y="425" width="374" height="88" rx="14" fill="#183b65" stroke="#3f8be0"/>
+<text x="112" y="458" class="k">Data &amp; messaging tier</text><text x="112" y="485" class="t">Database / storage / queues / transactions</text>
+<rect x="88" y="535" width="374" height="88" rx="14" fill="#183b65" stroke="#3f8be0"/>
+<text x="112" y="568" class="k">Shared platform dependencies</text><text x="112" y="595" class="t">Entra ID • DNS • Key Vault • network • PKI</text>
+<rect x="88" y="647" width="374" height="58" rx="12" fill="#0c1f3b" stroke="#568ec8" stroke-dasharray="5 4"/>
+<text x="112" y="682" class="t">Health signals • logs • app consistency</text>
+
+<!-- Control plane -->
+<rect x="565" y="195" width="465" height="545" rx="22" fill="#10284a" stroke="#9b6df0" stroke-width="2" filter="url(#shadow)"/>
+<rect x="565" y="195" width="465" height="62" rx="22" fill="url(#purple)"/>
+<text x="592" y="235" class="zone">02  PROTECTION &amp; ORCHESTRATION</text>
+<rect x="600" y="295" width="395" height="100" rx="14" fill="#392d68" stroke="#b28aff"/>
+<text x="626" y="330" class="k">Azure Site Recovery</text><text x="626" y="358" class="t">Supported workload replication • recovery plans</text><text x="626" y="380" class="s">Test failover • planned/unplanned failover • reprotect</text>
+<rect x="600" y="420" width="395" height="100" rx="14" fill="#392d68" stroke="#b28aff"/>
+<text x="626" y="455" class="k">Azure Backup</text><text x="626" y="483" class="t">Vault • policy • retention • recovery points</text><text x="626" y="505" class="s">Soft delete • immutability / Resource Guard where supported</text>
+<rect x="600" y="545" width="395" height="78" rx="14" fill="#243b68" stroke="#6fa9ff"/>
+<text x="626" y="577" class="k">Recovery orchestration &amp; approvals</text><text x="626" y="603" class="t">Runbooks • dependency order • human checkpoints</text>
+<rect x="600" y="647" width="395" height="58" rx="12" fill="#0c1f3b" stroke="#a98af2" stroke-dasharray="5 4"/>
+<text x="626" y="682" class="t">IaC • policy checks • evidence &amp; audit trail</text>
+
+<!-- Recovery zone -->
+<rect x="1100" y="195" width="445" height="545" rx="22" fill="#10284a" stroke="#16c4b0" stroke-width="2" filter="url(#shadow)"/>
+<rect x="1100" y="195" width="445" height="62" rx="22" fill="url(#cyan)"/>
+<text x="1127" y="235" class="zone">03  RECOVERY REGION</text>
+<text x="1127" y="285" class="s">Recovery site • example: West US 3</text>
+<rect x="1133" y="315" width="379" height="88" rx="14" fill="#124b5d" stroke="#21c4d1"/>
+<text x="1157" y="348" class="k">Recovered application tier</text><text x="1157" y="375" class="t">Replica / redeployed immutable workloads</text>
+<rect x="1133" y="425" width="379" height="88" rx="14" fill="#124b5d" stroke="#21c4d1"/>
+<text x="1157" y="458" class="k">Recovered data tier</text><text x="1157" y="485" class="t">Restore point • consistency • reconciliation</text>
+<rect x="1133" y="535" width="379" height="88" rx="14" fill="#124b5d" stroke="#21c4d1"/>
+<text x="1157" y="568" class="k">Isolated test network</text><text x="1157" y="595" class="t">Private DNS • routes • NSG • controlled ingress</text>
+<rect x="1133" y="647" width="379" height="58" rx="12" fill="#0c1f3b" stroke="#42d6bd" stroke-dasharray="5 4"/>
+<text x="1157" y="682" class="t">Synthetic checks • owner acceptance</text>
+
+<!-- Flows -->
+<path d="M495 354 H558" class="line"/><path d="M495 465 H558" class="dash"/>
+<path d="M1030 345 H1093" class="line"/><path d="M1030 470 H1093" class="dash"/>
+<path d="M1030 584 H1093" class="line"/>
+<text x="512" y="330" class="s">replicate</text><text x="512" y="492" class="s">backup</text>
+<text x="1040" y="325" class="s">recover</text><text x="1038" y="493" class="s">restore</text>
+
+<!-- Security/ops band -->
+<rect x="55" y="780" width="1490" height="150" rx="22" fill="#0b1d37" stroke="#395a83" stroke-width="1.5"/>
+<text x="82" y="818" class="tag">CROSS-CUTTING CONTROL PLANE</text>
+<g filter="url(#shadow)">
+<rect x="82" y="842" width="260" height="62" rx="12" fill="url(#green)"/><text x="105" y="868" class="k">IDENTITY &amp; SECURITY</text><text x="105" y="889" class="s">RBAC • PIM • OIDC • keys</text>
+<rect x="365" y="842" width="260" height="62" rx="12" fill="url(#blue)"/><text x="388" y="868" class="k">NETWORK &amp; DNS</text><text x="388" y="889" class="s">Private links • routing • egress</text>
+<rect x="648" y="842" width="260" height="62" rx="12" fill="url(#purple)"/><text x="671" y="868" class="k">OBSERVABILITY</text><text x="671" y="889" class="s">Azure Monitor • logs • alerts</text>
+<rect x="931" y="842" width="260" height="62" rx="12" fill="url(#orange)"/><text x="954" y="868" class="k">GOVERNANCE</text><text x="954" y="889" class="s">Policy • change • cost controls</text>
+<rect x="1214" y="842" width="300" height="62" rx="12" fill="url(#cyan)"/><text x="1237" y="868" class="k">BUSINESS VALIDATION</text><text x="1237" y="889" class="s">RTO/RPO • transactions • sign-off</text>
+</g>
+<text x="800" y="970" text-anchor="middle" class="s">Illustrative logical design • confirm workload support, region availability, quotas, networking and pricing before implementation</text>
+</svg>
