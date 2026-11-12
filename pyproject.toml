@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "azure-bcdr-readiness-lab"
+version = "0.1.0"
+description = "Synthetic Azure business continuity and disaster recovery readiness validator"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.4,<9", "ruff>=0.14,<1", "bandit>=1.9,<2"]
+
+[tool.setuptools]
+packages = ["dr"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
